@@ -7,9 +7,7 @@ export default class Boot extends Phaser.Scene {
         this.canvas = this.sys.game.canvas;
         const { width, height } = this.canvas; // la anchura y altura del canvas
 
-        ////////////////////////////////
-        ////////    PRELOADER     //////
-        ////////////////////////////////
+        // #region PRELOADER
         // segmento sacado de:
         // https://gamedevacademy.org/creating-a-preloading-screen-in-phaser-3/
         // gracias a toni <3
@@ -59,9 +57,96 @@ export default class Boot extends Phaser.Scene {
             }
         });
         assetText.setOrigin(0.5, 0.5);
+        // #endregion
+        
+        // Loading images
+        this.load.image('bg1', '../assets/sprites/background.png');
+        this.load.image('bg2', '../assets/sprites/background2.png');
+        this.load.image('stars', '../assets/sprites/stars.png');
+        this.load.image('icon', '../assets/sprites/icon.png');
+        this.load.image('platform', '../assets/sprites/platform.png');
+        this.load.spritesheet('clown', '../assets/sprites/clown.png', { frameWidth: 16, frameHeight: 24 });
+        this.load.spritesheet('fire', '../assets/sprites/fire.png', { frameWidth: 25, frameHeight: 31 });
+        this.load.spritesheet('lion', '../assets/sprites/lion.png', { frameWidth: 36, frameHeight: 16 });
+        this.load.spritesheet('ring', '../assets/sprites/ring.png', { frameWidth: 26, frameHeight: 80 });
+
+        // Loading audio
+        this.load.audio('failureMusic', '../assets/sounds/failure.mp3');
+        this.load.audio('stageMusic', '../assets/sounds/stage.mp3');
+        this.load.audio('menuMusic', '../assets/sounds/menu.mp3');
+        this.load.audio('finalEffect', '../assets/sounds/final.wav');
+        this.load.audio('jumpEffect', '../assets/sounds/jump.wav');
+        this.load.audio('scoreEffect', '../assets/sounds/score.wav  ');
+    }
+
+    createAnimations() {
+        this.anims.create({
+            key: 'clownIdle',
+            frames: this.anims.generateFrameNumbers('clown', {start:0, end:0}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'clownJump',
+            frames: this.anims.generateFrameNumbers('clown', {start:1, end:1}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'clownDie',
+            frames: this.anims.generateFrameNumbers('clown', {start:2, end:3}),
+            frameRate: 5,
+            repeat: 0
+        });
+        this.anims.create({
+            key: 'clownWin',
+            frames: this.anims.generateFrameNumbers('clown', {start:4, end:4}),
+            frameRate: 5,
+            repeat: 0
+        });
+
+        this.anims.create({
+            key: 'fireAnim',
+            frames: this.anims.generateFrameNumbers('fire', {start:0, end:1}),
+            frameRate: 5,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'ringAnim',
+            frames: this.anims.generateFrameNumbers('ring', {start:0, end:1}),
+            frameRate: 5,
+            repeat: -1
+        });
+
+        this.anims.create({
+            key: 'lionJump',
+            frames: this.anims.generateFrameNumbers('lion', {start:0, end:0}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'lionIdle',
+            frames: this.anims.generateFrameNumbers('lion', {start:2, end:2}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'lionWalk',
+            frames: this.anims.generateFrameNumbers('lion', {start:1, end:2}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'lionDie',
+            frames: this.anims.generateFrameNumbers('lion', {start:3, end:3}),
+            frameRate: 5,
+            repeat: -1
+        });
     }
 
     create() {
+        this.createAnimations();
         this.scene.start('Menu');
     }
 }
