@@ -9,7 +9,7 @@ export default class Menu extends Phaser.Scene {
 
     create() {
         const { width, height } = this.canvas; // la anchura y altura del canvas
-
+        const scene = this;
         // fondo estrellas
         this.add.image(width/2, height/2 - 100, 'stars').setScale(3).setOrigin(0.5, 0.5);
         // titulo
@@ -26,20 +26,20 @@ export default class Menu extends Phaser.Scene {
         let normal = this.add.text(width/2, height/2 + 100, "NORMAL", {
             fontFamily: 'arcade_classic',
             fontSize: 24,
-        }).setOrigin(0.5, 0.5);
+        }).setOrigin(0.5, 0.5).setInteractive();
         let hard = this.add.text(width/2, height/2 + 150, "HARD", {
             fontFamily: 'arcade_classic',
             fontSize: 24,
-        }).setOrigin(0.5, 0.5);
+        }).setOrigin(0.5, 0.5).setInteractive();
 
         easy.on('pointerdown', () => {
-            this.scene.start('Level');
+            scene.scene.start('Level', { score: 500 });
         });
         normal.on('pointerdown', () => {
-            this.scene.start('Level');
+            scene.scene.start('Level', { score: 1000});
         });
         hard.on('pointerdown', () => {
-            this.scene.start('Level');
+            scene.scene.start('Level', { score: 5000 });
         });
     }
 }
