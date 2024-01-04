@@ -1,6 +1,6 @@
-import Level from "./level.js";
-import Boot from "./boot.js";
-import Menu from "./menu.js";
+import Level from "./Level.js";
+import Boot from "./Boot.js";
+import Menu from "./Menu.js";
 
 const config = {
     type: Phaser.AUTO,

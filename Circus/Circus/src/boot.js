@@ -71,7 +71,7 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('ring', '../assets/sprites/ring.png', { frameWidth: 26, frameHeight: 80 });
 
         // Loading audio
-        this.load.audio('failureMusic', '../assets/sounds/failure.mp3');
+        this.load.audio('failureEffect', '../assets/sounds/failure.mp3');
         this.load.audio('stageMusic', '../assets/sounds/stage.mp3');
         this.load.audio('menuMusic', '../assets/sounds/menu.mp3');
         this.load.audio('finalEffect', '../assets/sounds/final.wav');

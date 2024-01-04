@@ -10,6 +10,11 @@ export default class Menu extends Phaser.Scene {
     create() {
         const { width, height } = this.canvas; // la anchura y altura del canvas
         const scene = this;
+
+        // musica
+        this.sound.stopAll();
+        this.sound.add('menuMusic', { loop: true }).play();
+        
         // fondo estrellas
         this.add.image(width/2, height/2 - 100, 'stars').setScale(3).setOrigin(0.5, 0.5);
         // titulo
@@ -33,13 +38,13 @@ export default class Menu extends Phaser.Scene {
         }).setOrigin(0.5, 0.5).setInteractive();
 
         easy.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 500 });
+            scene.scene.start('Level', { score: 5000 });
         });
         normal.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 1000});
+            scene.scene.start('Level', { score: 10000});
         });
         hard.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 5000 });
+            scene.scene.start('Level', { score: 20000 });
         });
     }
 }
