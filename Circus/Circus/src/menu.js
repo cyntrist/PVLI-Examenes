@@ -38,13 +38,13 @@ export default class Menu extends Phaser.Scene {
         }).setOrigin(0.5, 0.5).setInteractive();
 
         easy.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 5000 });
+            scene.scene.start('Level', { length: 50 });
         });
         normal.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 10000});
+            scene.scene.start('Level', { length: 100});
         });
         hard.on('pointerdown', () => {
-            scene.scene.start('Level', { score: 20000 });
+            scene.scene.start('Level', { length: 200 });
         });
     }
 }
