@@ -77,7 +77,7 @@ export default class Boot extends Phaser.Scene {
         this.load.audio('menuMusic', '../assets/sounds/menu.mp3');
         this.load.audio('finalEffect', '../assets/sounds/final.wav');
         this.load.audio('jumpEffect', '../assets/sounds/jump.wav');
-        this.load.audio('scoreEffect', '../assets/sounds/score.wav  ');
+        this.load.audio('scoreEffect', '../assets/sounds/score.wav');
     }
 
     createAnimations() {
@@ -102,8 +102,8 @@ export default class Boot extends Phaser.Scene {
         this.anims.create({
             key: 'clownWin',
             frames: this.anims.generateFrameNumbers('clown', {start:2, end:3}),
-            frameRate: 5,
-            repeat: 0
+            frameRate: 8,
+            repeat: -1
         });
 
         this.anims.create({

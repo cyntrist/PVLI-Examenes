@@ -3,6 +3,10 @@ export default class Menu extends Phaser.Scene {
         super({ key: 'Menu' });
     }
 
+    init(data) {
+        this.highscore = data.highscore || 0;
+    }
+    
     preload() {
         this.canvas = this.sys.game.canvas;
     }
@@ -38,13 +42,13 @@ export default class Menu extends Phaser.Scene {
         }).setOrigin(0.5, 0.5).setInteractive();
 
         easy.on('pointerdown', () => {
-            scene.scene.start('Level', { length: 50 });
+            scene.scene.start('Level', { length: 50, highscore: this.highscore });
         });
         normal.on('pointerdown', () => {
-            scene.scene.start('Level', { length: 100});
+            scene.scene.start('Level', { length: 100, highscore: this.highscore});
         });
         hard.on('pointerdown', () => {
-            scene.scene.start('Level', { length: 200 });
+            scene.scene.start('Level', { length: 200, highscore: this.highscore });
         });
     }
 }
