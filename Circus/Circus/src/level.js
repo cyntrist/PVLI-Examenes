@@ -166,6 +166,7 @@ export default class Level extends Phaser.Scene {
         setTimeout(() => {
             if (this.score > this.highscore) {
                 this.scoreSound.play();
+                this.highscore = 0;
                 this.animateHighscore = setInterval(() => {
                     if (this.score < 50) {
                         this.highscore += this.score;
