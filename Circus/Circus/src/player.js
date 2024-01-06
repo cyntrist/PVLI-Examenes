@@ -6,6 +6,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         scene.physics.world.enable(this);  
         this.setScale(3);   
         this.dead = false;
+        this.wins = false;
         this.cursors = scene.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.UP,
             right: Phaser.Input.Keyboard.KeyCodes.RIGHT
@@ -19,11 +20,11 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     move() {
-        if (!this.dead) {
+        if (!this.dead && !this.wins) {
             if (this.cursors.right.isDown) {
                 this.setVelocityX(200);
             }
-            else {
+            else if (this.body.touching.down) {
                 this.setVelocityX(0);
             }
 
@@ -36,5 +37,22 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.anims.play('clownIdle');
             }
         }
+        else {
+            if (this.dead) 
+                this.anims.play('clownDie');
+            else 
+                this.anims.play('clownWin');
+            this.setVelocity(0);
+            this.body.setAllowGravity(false);
+            this.body.setImmovable(true);
+        }
+    }
+
+    win() {
+        this.wins = true;
+    }
+
+    die() {
+        this.dead = true;
     }
 }

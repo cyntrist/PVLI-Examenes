@@ -69,6 +69,7 @@ export default class Boot extends Phaser.Scene {
         this.load.spritesheet('fire', '../assets/sprites/fire.png', { frameWidth: 25, frameHeight: 31 });
         this.load.spritesheet('lion', '../assets/sprites/lion.png', { frameWidth: 36, frameHeight: 16 });
         this.load.spritesheet('ring', '../assets/sprites/ring.png', { frameWidth: 26, frameHeight: 80 });
+        this.load.spritesheet('halfring', '../assets/sprites/ring.png', { frameWidth: 13, frameHeight: 80   });
 
         // Loading audio
         this.load.audio('failureEffect', '../assets/sounds/failure.mp3');
@@ -94,13 +95,13 @@ export default class Boot extends Phaser.Scene {
         });
         this.anims.create({
             key: 'clownDie',
-            frames: this.anims.generateFrameNumbers('clown', {start:2, end:3}),
+            frames: this.anims.generateFrameNumbers('clown', {start:4, end:4}),
             frameRate: 5,
             repeat: 0
         });
         this.anims.create({
             key: 'clownWin',
-            frames: this.anims.generateFrameNumbers('clown', {start:4, end:4}),
+            frames: this.anims.generateFrameNumbers('clown', {start:2, end:3}),
             frameRate: 5,
             repeat: 0
         });
@@ -115,6 +116,12 @@ export default class Boot extends Phaser.Scene {
         this.anims.create({
             key: 'ringAnim',
             frames: this.anims.generateFrameNumbers('ring', {start:0, end:1}),
+            frameRate: 5,
+            repeat: -1
+        });
+        this.anims.create({
+            key: 'halfRingAnim',
+            frames: this.anims.generateFrameNumbers('halfring', {frames: [1, 3]}),
             frameRate: 5,
             repeat: -1
         });
