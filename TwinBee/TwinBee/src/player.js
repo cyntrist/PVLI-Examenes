@@ -1,7 +1,7 @@
 import Bullet from "./bullet.js";
 
 const speed = 200;
-const cooldown = 100;
+const cooldown = 1000;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, number) {
@@ -12,6 +12,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.dead = false;
         this.number = number;
         this.level = 1;
+
+        this.lastShot = 0;
 
         this.shootSound = scene.sound.add('shootSfx');
         this.deadSound = scene.sound.add('deadSfx');
@@ -49,14 +51,15 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
         scene.add.existing(this);
         scene.physics.world.enable(this);
+        this.body.setImmovable(true);
     }
 
     preUpdate(time, deltaTime) {
         super.preUpdate(time, deltaTime);
-        this.move();
+        this.move(time);
     }
 
-    move() {
+    move(time) {
         if (this.input) {
             this.setVelocity(0);
 
@@ -79,8 +82,9 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 this.animate(this.idleAnim);
             }
 
-            if (this.cursors.shoot.isDown) {
+            if (this.cursors.shoot.isDown && time - this.lastShot > cooldown) {
                 this.shoot();
+                this.lastShot = time;
             }
         }
         else {
@@ -99,18 +103,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.shootSound.play();
         switch (this.level) {
             case 1:
-                this.spawnBullet();
+                this.spawnBullet(0, 0);
                 break;
             case 2:
-                this.spawnBullet();
-                this.spawnBullet();
+                this.spawnBullet(-5, -10);
+                this.spawnBullet(5, 10);
 
                 break;
             case 3:
-                this.spawnBullet();
-                this.spawnBullet();
-                this.spawnBullet();
-                this.spawnBullet();
+                this.spawnBullet(-8, -10);
+                this.spawnBullet(-4, 0);
+                this.spawnBullet(4, 0);
+                this.spawnBullet(8, 10);
 
                 break;
             default:
@@ -120,9 +124,18 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.animate(this.shootAnim);
     }
 
-    spawnBullet() {
-        const bullet = new Bullet();
-        scene.bulletPool.push(bullet);
+    spawnBullet(x, desviacion) {
+
+        const bullet = this.scene.bulletPool.get(this.x, this.y);
+
+        if (bullet) {
+            bullet.setActive(true);
+            bullet.setVisible(true);
+            bullet.setPosition(this.x + x,  this.y - this.height/2);
+            bullet.setDesviacion(desviacion);
+        }
+        //const bullet = new Bullet(this.scene, this.x + x, this.y - this.height/2, 'bullet', desviacion);
+        //this.scene.bulletPool.push(bullet);
     }
 
     die() {
@@ -130,5 +143,14 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         this.deadSound.play();
         this.scene.eventEmitter.emit('lose');
         this.destroy();
+    }
+
+    upgrade() {
+        if (this.level <= 2) {
+            this.level++;
+            setTimeout(() => {
+                this.level--;
+            }, 10000);
+        }
     }
 }

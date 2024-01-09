@@ -1,6 +1,7 @@
 import Player from "./player.js";
 import Enemy from "./enemy.js";
 import Bullet from "./bullet.js";
+import Green from "./green.js";
 // import Sprite from "./sprite.js";
 // import Container from "./container.js";
 
@@ -46,16 +47,37 @@ export default class Level extends Phaser.Scene {
         this.lives = this.data;
 
         // disparos
-        this.bulletPool = [];
-        const bullet = new Bullet(this, width/2, height/2, 'bullet');
-        this.bulletPool.push(bullet);
+        //this.bulletPool = [];
+        this.bulletPool = this.physics.add.group({
+            classType: Bullet,
+            maxSize: 100, 
+            runChildUpdate: true, 
+        });
+        this.enemyPool = [];
+        this.greenPool = [];
+        // this.physics.overlap(this.bulletPool, this.enemyPool, (bullet, enemy) => {
+        //     enemy.die();
+        //     bullet.setActive(false);
+        //     bullet.setVisible(false);
+        // });
+        this.physics.add.collider(this.enemyPool, this.bulletPool, (enemy, bullet) => {
+            enemy.die();
+            bullet.setActive(false);
+            bullet.setVisible(false);
+        }, null, this);
+        this.physics.add.collider(this.greenPool, this.player1, (green, player1) => {
+            green.interact();
+            player1.upgrade();
+        }, null, this);
+        this.physics.add.collider(this.greenPool, this.player2, (green, player2) => {
+            green.interact();
+            player2.upgrade();
+        }, null, this);
+        this.greenPool.push(new Green(this, width/2, height/2));
 
         // bg 
         this.background = this.add.image(0, 0, 'background').setOrigin(0, 0);
         this.background.y = - this.background.height + height;
-
-
-
 
 
 
@@ -73,9 +95,9 @@ export default class Level extends Phaser.Scene {
             let enemy = new Enemy(this, randomX, 0);
             enemy.y = -enemy.height/2;
             this.addCollision(enemy);
+            this.enemyPool.push(enemy);
         }, 3000);
         
-
 
 
 
@@ -92,7 +114,6 @@ export default class Level extends Phaser.Scene {
         }, this)
     
         // this.time.delayedCall(5000, metodo(), [], this);
-
     }
 
     preUpdate(time, deltaTime) {
@@ -100,7 +121,12 @@ export default class Level extends Phaser.Scene {
     }
 
     update() {
-
+        this.bulletPool.getChildren().forEach(bullet => {
+            if (bullet.y < 0) {
+                bullet.setActive(false);
+                bullet.setVisible(false);
+            }
+        });
     }
 
     onLose() {
@@ -132,12 +158,16 @@ export default class Level extends Phaser.Scene {
     }
 
     addCollision(enemy) {
-        this.physics.add.collider(this.player1, enemy, () => {
-            this.player1.die();
+        this.physics.add.collider(this.player1, enemy, (enemy, player1) => {
+            if (enemy.moves) {
+                this.player1.die();
+            }
         }, null, this);
         if (this.player2 !== undefined) {
-            this.physics.add.collider(this.player2, enemy, () => {
-                this.player2.die();
+            this.physics.add.collider(this.player2, enemy, (enemy, player2) => {
+                if (enemy.moves) {
+                    this.player2.die();
+                }
             }, null, this);
         }
     }

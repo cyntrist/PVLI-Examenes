@@ -1,11 +1,14 @@
 const speed = 100;
 
-export default class Sprite extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, image) {
-        super(scene, x, y, image);
+export default class Bullet extends Phaser.Physics.Arcade.Sprite {
+    constructor(scene, x, y, desviacion) {
+        super(scene, x, y, 'bullet');
+        this.setActive(false);
+        this.setVisible(false);
         this.setScale(1);
         this.moves = true;
         this.depth = 10;
+        this.desviacion = desviacion
         scene.add.existing(this);
         scene.physics.world.enable(this);
         this.body.setImmovable(true);
@@ -20,10 +23,15 @@ export default class Sprite extends Phaser.Physics.Arcade.Sprite {
 
     move() {
         this.setVelocityY(-speed);
+        this.setVelocityX(this.desviacion);
     }
 
     die() {
         this.moves = false;
         this.setVelocity(0);
+    }
+
+    setDesviacion(value) {
+        this.desviacion = value;
     }
 }
