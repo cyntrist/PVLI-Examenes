@@ -36,6 +36,7 @@ export default class Level extends Phaser.Scene {
         this.luckySound = this.sound.add('luckySfx');
 
 
+        
 
         // player
         if (this.data === 1 ) {
@@ -46,7 +47,11 @@ export default class Level extends Phaser.Scene {
         }
         this.lives = this.data;
 
-        // disparos
+
+
+
+
+        // Colisiones
         //this.bulletPool = [];
         this.bulletPool = this.physics.add.group({
             classType: Bullet,
@@ -73,11 +78,15 @@ export default class Level extends Phaser.Scene {
             green.interact();
             player2.upgrade();
         }, null, this);
-        this.greenPool.push(new Green(this, width/2, height/2));
+
+
+
+
 
         // bg 
         this.background = this.add.image(0, 0, 'background').setOrigin(0, 0);
         this.background.y = - this.background.height + height;
+
 
 
 
@@ -98,6 +107,7 @@ export default class Level extends Phaser.Scene {
             this.enemyPool.push(enemy);
         }, 3000);
         
+
 
 
 

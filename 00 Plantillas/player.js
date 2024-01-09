@@ -1,12 +1,10 @@
-const speedX = 100;
-const speedY = -100;
+const speed = 100;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y) {
         super(scene, x, y, { key: 'player' });
         this.play('playerIdle');
-        this.dead = false;
-        this.wins = false;
+        this.input = true;
         this.setScale(1);
         this.depth = 1;
         this.jumpSound = scene.sound.add('jumpEffect');
@@ -20,6 +18,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         });
         scene.add.existing(this);
         scene.physics.world.enable(this);
+        this.body.setImmovable(true);
     }
 
     preUpdate(time, deltaTime) {
@@ -28,23 +27,26 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     move() {
-        if (!this.dead && !this.wins) {
-            if (this.cursors.right.isDown) {
-                this.setVelocityX(speedX);
+        if (this.input) {
+            this.setVelocity(0);
+
+            if (this.cursors.left.isDown && (this.x - this.width / 2) > 0) {
+                this.setVelocityX(-speed);
+                this.animate(this.leftAnim);
             }
-            else {
-                this.setVelocityX(0);
+            if (this.cursors.right.isDown && (this.x + this.width / 2) < this.scene.width) {
+                this.setVelocityX(speed);
+                this.animate(this.rightAnim);
+            }
+            if (this.cursors.up.isDown && (this.y - this.height / 2) > 0) {
+                this.setVelocityY(-speed);
+            }
+            if (this.cursors.down.isDown && (this.y + this.height / 2) < this.scene.height) {
+                this.setVelocityY(speed);
             }
 
-            if (this.cursors.up.isDown && this.body.touching.down) {
-                this.setVelocityY(speedY);
-                if (this.anims.currentAnim.key !== 'playerJump')
-                    this.anims.play('playerJump');
-                this.jumpSound.play();
-            }
-            else if (this.body.touching.down) {
-                if (this.anims.currentAnim.key !== 'playerIdle')
-                    this.anims.play('playerIdle');
+            if (this.body.velocity.x === 0) {
+                this.animate(this.idleAnim);
             }
         }
         else {
@@ -54,17 +56,17 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
         }
     }
 
+    animate(anim) {
+        if (this.anims.currentAnim.key !== anim) {
+            this.anims.play(anim);
+        }
+    }
+
     win() {
-        if (this.anims.currentAnim.key !== 'playerWin')
-            this.play('playerWin');
-        this.wins = true;
-        this.depth = 10;
+
     }
 
     die() {
-        if (this.anims.currentAnim.key !== 'playerDie')
-            this.play('playerDie');
-        this.dead = true;
-        this.depth = 10;
+
     }
 }

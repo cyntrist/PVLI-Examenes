@@ -17,6 +17,8 @@ export default class Level extends Phaser.Scene {
 
     create() {
         const { width, height } = this.canvas; // la anchura y altura del canvas
+        this.width = width;
+        this.height = height;
         const scene = this;
 
         // audio
@@ -27,7 +29,6 @@ export default class Level extends Phaser.Scene {
         // player
         this.player = new Player(this, 0, 0);
         this.physics.add.collider(this.player, object, callback, null, this);
-        this.collisionFlag = false;
 
         // bg 
         let background = this.add.image(0, 200, 'background').setScale(1).setOrigin(0, 0);
@@ -43,9 +44,11 @@ export default class Level extends Phaser.Scene {
         
         this.time.delayedCall(5000, metodo(), [], this);
 
-        this.pool = [];
-        const element = new Element(this, x, y);
-        this.pool.push(element);
+        this.pool = this.physics.add.group({
+            classType: Element,
+            maxSize: 100, 
+            runChildUpdate: true, 
+        });
     }
 
     preUpdate(time, deltaTime) {
@@ -57,20 +60,22 @@ export default class Level extends Phaser.Scene {
     }
 
     onDie() {
-        if (!this.collisionFlag) {
-            
-        }
+
     }
 
     onWin() {
-        if (!this.collisionFlag) {
-            
-        }
+
     }
 
     endGame() {
         setTimeout(() => {
             this.scene.start('Menu');
         }, 4000);
+    }
+
+    
+    disableInput()  {
+        clearInterval(this.interval);
+        this.player1.input = false;
     }
 }

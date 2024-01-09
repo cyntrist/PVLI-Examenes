@@ -59,7 +59,6 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
 
     reward() {
         let chance = Phaser.Math.Between(0, 1);
-        chance = 1;
         if (chance === 1) {
             this.scene.greenPool.push(new Green(this.scene, this.x, this.y));
         }
