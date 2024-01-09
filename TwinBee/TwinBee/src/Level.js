@@ -158,13 +158,13 @@ export default class Level extends Phaser.Scene {
     }
 
     addCollision(enemy) {
-        this.physics.add.collider(this.player1, enemy, (enemy, player1) => {
+        this.physics.add.collider(this.player1, enemy, (player1, enemy) => {
             if (enemy.moves) {
                 this.player1.die();
             }
         }, null, this);
         if (this.player2 !== undefined) {
-            this.physics.add.collider(this.player2, enemy, (enemy, player2) => {
+            this.physics.add.collider(this.player2, enemy, (player2, enemy) => {
                 if (enemy.moves) {
                     this.player2.die();
                 }
