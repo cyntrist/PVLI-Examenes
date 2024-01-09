@@ -1,23 +1,52 @@
-const speedX = 100;
-const speedY = -100;
+import Bullet from "./bullet.js";
+
+const speed = 200;
+const cooldown = 100;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y) {
+    constructor(scene, x, y, number) {
         super(scene, x, y, { key: 'player' });
-        this.play('playerIdle');
-        this.dead = false;
-        this.wins = false;
+        this.input = true;
         this.setScale(1);
         this.depth = 1;
-        this.jumpSound = scene.sound.add('jumpEffect');
-        this.cursors = scene.input.keyboard.addKeys({
-            up: Phaser.Input.Keyboard.KeyCodes.UP,
-            right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
-            left: Phaser.Input.Keyboard.KeyCodes.LEFT,
-            down: Phaser.Input.Keyboard.KeyCodes.DOWN,
-            interact: Phaser.Input.Keyboard.KeyCodes.E,
-            escape: Phaser.Input.Keyboard.KeyCodes.ESC
-        });
+        this.dead = false;
+        this.number = number;
+        this.level = 1;
+
+        this.shootSound = scene.sound.add('shootSfx');
+        this.deadSound = scene.sound.add('deadSfx');
+
+        if (this.number === 1) {
+            this.idleAnim = 'twinIdle';
+            this.leftAnim = 'twinLeft';
+            this.rightAnim = 'twinRight';
+            this.shootAnim = 'twinShoot';
+            this.cursors = scene.input.keyboard.addKeys({
+                up: Phaser.Input.Keyboard.KeyCodes.W,
+                right: Phaser.Input.Keyboard.KeyCodes.D,
+                left: Phaser.Input.Keyboard.KeyCodes.A,
+                down: Phaser.Input.Keyboard.KeyCodes.S,
+                shoot: Phaser.Input.Keyboard.KeyCodes.SPACE,
+                escape: Phaser.Input.Keyboard.KeyCodes.ESC
+            });
+        }
+        else {
+            this.idleAnim = 'winIdle';
+            this.leftAnim = 'winLeft';
+            this.rightAnim = 'winRight';
+            this.shootAnim = 'winShoot';
+            this.cursors = scene.input.keyboard.addKeys({
+                up: Phaser.Input.Keyboard.KeyCodes.UP,
+                right: Phaser.Input.Keyboard.KeyCodes.RIGHT,
+                left: Phaser.Input.Keyboard.KeyCodes.LEFT,
+                down: Phaser.Input.Keyboard.KeyCodes.DOWN,
+                shoot: Phaser.Input.Keyboard.KeyCodes.ENTER,
+                escape: Phaser.Input.Keyboard.KeyCodes.ESC
+            });
+        }
+        this.play(this.idleAnim);
+
+
         scene.add.existing(this);
         scene.physics.world.enable(this);
     }
@@ -28,43 +57,78 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     move() {
-        if (!this.dead && !this.wins) {
-            if (this.cursors.right.isDown) {
-                this.setVelocityX(speedX);
+        if (this.input) {
+            this.setVelocity(0);
+
+            if (this.cursors.left.isDown && (this.x - this.width / 2) > 0) {
+                this.setVelocityX(-speed);
+                this.animate(this.leftAnim);
             }
-            else {
-                this.setVelocityX(0);
+            if (this.cursors.right.isDown && (this.x + this.width / 2) < this.scene.width) {
+                this.setVelocityX(speed);
+                this.animate(this.rightAnim);
+            }
+            if (this.cursors.up.isDown && (this.y - this.height / 2) > 0) {
+                this.setVelocityY(-speed);
+            }
+            if (this.cursors.down.isDown && (this.y + this.height / 2) < this.scene.height) {
+                this.setVelocityY(speed);
             }
 
-            if (this.cursors.up.isDown && this.body.touching.down) {
-                this.setVelocityY(speedY);
-                if (this.anims.currentAnim.key !== 'playerJump')
-                    this.anims.play('playerJump');
-                this.jumpSound.play();
+            if (this.body.velocity.x === 0) {
+                this.animate(this.idleAnim);
             }
-            else if (this.body.touching.down) {
-                if (this.anims.currentAnim.key !== 'playerIdle')
-                    this.anims.play('playerIdle');
+
+            if (this.cursors.shoot.isDown) {
+                this.shoot();
             }
         }
         else {
             this.setVelocity(0);
-            this.body.setAllowGravity(false);
             this.body.setImmovable(true);
         }
     }
 
-    win() {
-        if (this.anims.currentAnim.key !== 'playerWin')
-            this.play('playerWin');
-        this.wins = true;
-        this.depth = 10;
+    animate(anim) {
+        if (this.anims.currentAnim.key !== anim) {
+            this.anims.play(anim);
+        }
+    }
+
+    shoot() {
+        this.shootSound.play();
+        switch (this.level) {
+            case 1:
+                this.spawnBullet();
+                break;
+            case 2:
+                this.spawnBullet();
+                this.spawnBullet();
+
+                break;
+            case 3:
+                this.spawnBullet();
+                this.spawnBullet();
+                this.spawnBullet();
+                this.spawnBullet();
+
+                break;
+            default:
+                break;
+        }
+
+        this.animate(this.shootAnim);
+    }
+
+    spawnBullet() {
+        const bullet = new Bullet();
+        scene.bulletPool.push(bullet);
     }
 
     die() {
-        if (this.anims.currentAnim.key !== 'playerDie')
-            this.play('playerDie');
         this.dead = true;
-        this.depth = 10;
+        this.deadSound.play();
+        this.scene.eventEmitter.emit('lose');
+        this.destroy();
     }
 }

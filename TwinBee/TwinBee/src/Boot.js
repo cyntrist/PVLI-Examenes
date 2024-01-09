@@ -85,13 +85,13 @@ export default class Boot extends Phaser.Scene {
             repeat: -1
         });
         this.anims.create({
-            key: 'twinLeft',
+            key: 'twinRight',
             frames: this.anims.generateFrameNumbers('twinbee', {start:1, end:1}),
             frameRate: 1,
             repeat: -1
         });
         this.anims.create({
-            key: 'twinRight',
+            key: 'twinLeft',
             frames: this.anims.generateFrameNumbers('twinbee', {start:2, end:2}),
             frameRate: 1,
             repeat: -1
@@ -110,13 +110,13 @@ export default class Boot extends Phaser.Scene {
             repeat: -1
         });
         this.anims.create({
-            key: 'winLeft',
+            key: 'winRight',
             frames: this.anims.generateFrameNumbers('winbee', {start:1, end:1}),
             frameRate: 0,
             repeat: -1
         });
         this.anims.create({
-            key: 'winRight',
+            key: 'winLeft',
             frames: this.anims.generateFrameNumbers('winbee', {start:2, end:2}),
             frameRate: 0,
             repeat: -1
@@ -139,12 +139,12 @@ export default class Boot extends Phaser.Scene {
             key: 'explosionAnim',
             frames: this.anims.generateFrameNumbers('explosion', {start:0, end:2}),
             frameRate: 5,
-            repeat: -1
+            repeat: 2
         });
     }
 
     create() {
         this.createAnimations();
-        this.scene.start('Menu');
+        this.scene.start('Title');
     }
 }
