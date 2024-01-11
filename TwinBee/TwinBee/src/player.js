@@ -5,7 +5,7 @@ const cooldown = 1000;
 
 export default class Player extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, number) {
-        super(scene, x, y, { key: 'player' });
+        super(scene, x, y, 'twinIdle');
         this.input = true;
         this.setScale(1);
         this.depth = 1;
@@ -46,7 +46,7 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 escape: Phaser.Input.Keyboard.KeyCodes.ESC
             });
         }
-        console.log(this.scene.anims.get(this.idleAnim));
+        console.log(this.anims);
         this.anims.play(this.idleAnim);
 
 
