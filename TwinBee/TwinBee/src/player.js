@@ -46,7 +46,8 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
                 escape: Phaser.Input.Keyboard.KeyCodes.ESC
             });
         }
-        this.play(this.idleAnim);
+        console.log(this.scene.anims.get(this.idleAnim));
+        this.anims.play(this.idleAnim);
 
 
         scene.add.existing(this);

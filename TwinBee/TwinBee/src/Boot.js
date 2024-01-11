@@ -58,7 +58,7 @@ export default class Boot extends Phaser.Scene {
         });
         assetText.setOrigin(0.5, 0.5);
         // #endregion
-        
+
         // Loading images
         this.load.image('background', '../assets/images/background.png');
         this.load.image('bullet', '../assets/images/bullet.png');
@@ -80,64 +80,64 @@ export default class Boot extends Phaser.Scene {
     createAnimations() {
         this.anims.create({
             key: 'twinIdle',
-            frames: this.anims.generateFrameNumbers('twinbee', {start:0, end:0}),
+            frames: this.anims.generateFrameNumbers('twinbee', { start: 0, end: 0 }),
             frameRate: 1,
             repeat: -1
         });
         this.anims.create({
             key: 'twinRight',
-            frames: this.anims.generateFrameNumbers('twinbee', {start:1, end:1}),
+            frames: this.anims.generateFrameNumbers('twinbee', { start: 1, end: 1 }),
             frameRate: 1,
             repeat: -1
         });
         this.anims.create({
             key: 'twinLeft',
-            frames: this.anims.generateFrameNumbers('twinbee', {start:2, end:2}),
+            frames: this.anims.generateFrameNumbers('twinbee', { start: 2, end: 2 }),
             frameRate: 1,
             repeat: -1
         });
         this.anims.create({
             key: 'twinShoot',
-            frames: this.anims.generateFrameNumbers('twinbee', {start:3, end:3}),
+            frames: this.anims.generateFrameNumbers('twinbee', { start: 3, end: 3 }),
             frameRate: 1,
             repeat: -1
         });
 
         this.anims.create({
             key: 'winIdle',
-            frames: this.anims.generateFrameNumbers('winbee', {start:0, end:0}),
+            frames: this.anims.generateFrameNumbers('winbee', { start: 0, end: 0 }),
             frameRate: 0,
             repeat: -1
         });
         this.anims.create({
             key: 'winRight',
-            frames: this.anims.generateFrameNumbers('winbee', {start:1, end:1}),
+            frames: this.anims.generateFrameNumbers('winbee', { start: 1, end: 1 }),
             frameRate: 0,
             repeat: -1
         });
         this.anims.create({
             key: 'winLeft',
-            frames: this.anims.generateFrameNumbers('winbee', {start:2, end:2}),
+            frames: this.anims.generateFrameNumbers('winbee', { start: 2, end: 2 }),
             frameRate: 0,
             repeat: -1
         });
         this.anims.create({
             key: 'winShoot',
-            frames: this.anims.generateFrameNumbers('winbee', {start:3, end:3}),
+            frames: this.anims.generateFrameNumbers('winbee', { start: 3, end: 3 }),
             frameRate: 0,
             repeat: -1
         });
 
         this.anims.create({
             key: 'enemyAnim',
-            frames: this.anims.generateFrameNumbers('enemy', {start:0, end:3}),
+            frames: this.anims.generateFrameNumbers('enemy', { start: 0, end: 3 }),
             frameRate: 5,
             repeat: -1
         });
 
         this.anims.create({
             key: 'explosionAnim',
-            frames: this.anims.generateFrameNumbers('explosion', {start:0, end:2}),
+            frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 2 }),
             frameRate: 5,
             repeat: 2
         });
