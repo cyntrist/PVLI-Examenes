@@ -74,11 +74,12 @@ export default class Level extends Phaser.Scene {
             green.interact();
             player1.upgrade();
         }, null, this);
-        this.physics.add.collider(this.greenPool, this.player2, (green, player2) => {
-            green.interact();
-            player2.upgrade();
-        }, null, this);
-
+        if (this.player2 !== undefined) {
+            this.physics.add.collider(this.greenPool, this.player2, (green, player2) => {
+                green.interact();
+                player2.upgrade();
+            }, null, this);
+        }
 
 
 
@@ -160,6 +161,15 @@ export default class Level extends Phaser.Scene {
     }
 
     disableInput()  {
+        this.enemyPool.forEach(enemy => {
+            enemy.moves = false;
+        });
+        this.greenPool.forEach(green => {
+            green.moves = false;
+        });
+        this.bulletPool.getChildren().forEach(bullet => {
+            bullet.moves = false;
+        });
         clearInterval(this.backgroundInterval);
         clearInterval(this.enemyInterval);
         this.player1.input = false;

@@ -50,6 +50,7 @@ export default class Enemy extends Phaser.Physics.Arcade.Sprite {
             this.tween.stop();
             this.play('explosionAnim');
             this.explosionSound.play();
+            this.body.enable = false;
             this.reward();
             setTimeout(() => {
                 this.destroy();
